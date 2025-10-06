@@ -10,6 +10,13 @@ A powerful yet easy-to-use digital dice for all your random number needs.
 
 ---
 
+## 🚀 Live Demo
+
+Experience the tool in action:  
+👉 [Try the Random Number Generator](https://techonexus.com/random-number-generator/)
+
+---
+
 ## 🎯 What is a Random Number Generator?
 
 A **Random Number Generator (RNG)** is a smart digital tool that creates sequences of numbers with no predictable pattern.  
