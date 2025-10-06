@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Random Number Generator</title>
+<style>
+    body { font-family: Arial, sans-serif; background: #f9f9f9; color: #333; display: flex; justify-content: center; padding: 50px; }
+    .calculator { background: #fff; padding: 25px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); width: 350px; max-width: 90%; }
+    h2 { text-align: center; margin-bottom: 20px; }
+    label { display: block; margin-top: 10px; }
+    input, select, button { width: 100%; padding: 8px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc; font-size: 1rem; }
+    button { background: #007BFF; color: #fff; border: none; cursor: pointer; margin-top: 15px; }
+    button:hover { background: #0056b3; }
+    #result { margin-top: 20px; font-weight: bold; font-size: 1.2em; word-wrap: break-word; text-align: center; }
+    .message { margin-top: 10px; padding: 10px; border-radius: 5px; text-align: center; font-size: 0.95rem; }
+    .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+    .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+</style>
+</head>
+<body>
+
+<div class="calculator">
+    <h2>Random Number Generator</h2>
+    <label>Min:
+        <input type="number" id="min" value="1">
+    </label>
+    <label>Max:
+        <input type="number" id="max" value="10">
+    </label>
+    <label>How many:
+        <input type="number" id="count" value="5">
+    </label>
+    <label>Allow Duplicates:
+        <select id="duplicates">
+            <option value="yes">Yes</option>
+            <option value="no" selected>No</option>
+        </select>
+    </label>
+    <label>Sort:
+        <select id="sort" onchange="updateResultFormat()">
+            <option value="none" selected>None</option>
+            <option value="asc">Low to High</option>
+            <option value="desc">High to Low</option>
+        </select>
+    </label>
+    <label>Display Format:
+        <select name="delimiter" id="delimiter" onchange="updateResultFormat()">
+            <option value="comma">Text with Commas</option>
+            <option value="space" selected>Text with Spaces</option>
+            <option value="row">1 Spreadsheet Row</option>
+            <option value="col">1 Spreadsheet Column</option>
+        </select>
+    </label>
+
+    <button onclick="generateNumbers()">Generate</button>
+    <button onclick="copyResult()">Copy to Clipboard</button>
+
+    <div id="result"></div>
+    <div id="copyMessage"></div>
+</div>
+
+<script>
+let generatedNumbers = []; // store numbers so we can re-format them later
+
+function showMessage(text, type = 'success') {
+    const messageBox = document.getElementById('copyMessage');
+    messageBox.className = `message ${type}`;
+    messageBox.innerText = text;
+    setTimeout(() => { messageBox.innerText = ''; messageBox.className = ''; }, 3000);
+}
+
+function generateNumbers() {
+    const min = parseInt(document.getElementById('min').value);
+    const max = parseInt(document.getElementById('max').value);
+    const count = parseInt(document.getElementById('count').value);
+    const allowDup = document.getElementById('duplicates').value === 'yes';
+
+    generatedNumbers = []; // reset
+
+    if (isNaN(min) || isNaN(max) || isNaN(count)) return showMessage('❌ Please enter valid numbers.', 'error');
+    if (min > max) return showMessage('❌ Min cannot be greater than Max.', 'error');
+    if (count <= 0) return showMessage('❌ Count must be at least 1.', 'error');
+    if (!allowDup && count > (max - min + 1)) return showMessage(`❌ Cannot generate ${count} unique numbers between ${min} and ${max}.`, 'error');
+
+    while (generatedNumbers.length < count) {
+        let n = Math.floor(Math.random() * (max - min + 1)) + min;
+        if (allowDup || !generatedNumbers.includes(n)) generatedNumbers.push(n);
+    }
+
+    updateResultFormat();
+    showMessage('✅ Numbers generated successfully!', 'success');
+}
+
+function updateResultFormat() {
+    const sortOrder = document.getElementById('sort').value;
+    const delimiter = document.getElementById('delimiter').value;
+    const resultBox = document.getElementById('result');
+
+    if (generatedNumbers.length === 0) { resultBox.innerText = ''; return; }
+
+    let nums = [...generatedNumbers];
+
+    // sort if selected
+    if (sortOrder === 'asc') nums.sort((a,b) => a - b);
+    if (sortOrder === 'desc') nums.sort((a,b) => b - a);
+
+    // format preview
+    switch (delimiter) {
+        case 'comma': resultBox.innerText = nums.join(', '); break;
+        case 'space': resultBox.innerText = nums.join(' '); break;
+        case 'row':   resultBox.innerText = nums.join('\t'); break;
+        case 'col':   resultBox.innerText = nums.join('\n'); break;
+    }
+}
+
+function copyResult() {
+    if (generatedNumbers.length === 0) return showMessage('⚠️ No numbers to copy. Please generate numbers first.', 'error');
+
+    const delimiter = document.getElementById('delimiter').value;
+    let nums = [...generatedNumbers];
+
+    const sortOrder = document.getElementById('sort').value;
+    if (sortOrder === 'asc') nums.sort((a,b) => a - b);
+    if (sortOrder === 'desc') nums.sort((a,b) => b - a);
+
+    let textToCopy = '';
+    switch (delimiter) {
+        case 'comma': textToCopy = nums.join(', '); break;
+        case 'space': textToCopy = nums.join(' '); break;
+        case 'row':   textToCopy = nums.join('\t'); break;
+        case 'col':   textToCopy = nums.join('\n'); break;
+    }
+
+    navigator.clipboard.writeText(textToCopy)
+        .then(() => showMessage('✅ Numbers copied to clipboard!', 'success'))
+        .catch(() => showMessage('❌ Failed to copy numbers.', 'error'));
+}
+</script>
+</body>
+</html>
