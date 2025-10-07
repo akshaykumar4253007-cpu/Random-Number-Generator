@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="[https://techonexus.com/wp-content/uploads/2025/09/Black-and-White-X-Letter-Digital-Company-Logo-3.png](https://github.com/akshaykumar4253007-cpu/Random-Number-Generator/blob/main/Random%20Number%20Generator.gif)" alt="Logo" width="150"/>
+  <img src="https://github.com/akshaykumar4253007-cpu/Random-Number-Generator/blob/main/Random%20Number%20Generator.gif" alt="Logo" width="150"/>
 </p>
 
 <h1 align="center">🎲 Random Number Generator</h1>
