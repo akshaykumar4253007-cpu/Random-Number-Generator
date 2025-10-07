@@ -26,7 +26,7 @@ A professional and user-friendly digital tool for generating truly random number
 ## 👀 Tool Preview
 
 <p align="center">
-  <img src="http://techonexus.com/wp-content/uploads/2025/10/Random-Number-Generator.png" alt="Random Number Generator Tool Screenshot" width="600"/>
+  <img src="https://github.com/akshaykumar4253007-cpu/Random-Number-Generator/blob/main/Random%20Number%20Generator.gif" alt="Random Number Generator Tool Screenshot" width="600"/>
 </p>
 
 ---
